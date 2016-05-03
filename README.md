@@ -36,6 +36,7 @@ $ ngrok http 8080
 
 ## How to minify ccs and js using gulp
  * in the project root folder
+ 
  ```
 $ nmp install
 $ gulp mincss
