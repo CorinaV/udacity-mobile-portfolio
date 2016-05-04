@@ -403,16 +403,17 @@ var resizePizzas = function(size) {
   window.performance.mark("mark_start_resize");   // User Timing API function
 
   // Changes the value for the size of the pizza above the slider
+  //changed querySelector with getElementById
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
-        document.querySelector("#pizzaSize").innerHTML = "Small";
+        document.getElementById("pizzaSize").innerHTML = "Small";
         return;
       case "2":
-        document.querySelector("#pizzaSize").innerHTML = "Medium";
+        document.getElementById("pizzaSize").innerHTML = "Medium";
         return;
       case "3":
-        document.querySelector("#pizzaSize").innerHTML = "Large";
+        document.getElementById("pizzaSize").innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
@@ -424,7 +425,7 @@ var resizePizzas = function(size) {
    // Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).
   function determineDx (elem, size) {
     var oldWidth = elem.offsetWidth;
-    var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
+    var windowWidth = document.getElementById("randomPizzas").offsetWidth;
     var oldSize = oldWidth / windowWidth;
 
     // Optional TODO: change to 3 sizes? no more xl?
@@ -511,9 +512,15 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
   //took outside of loop the calculation because it needs to be calculated only once
   var scrollPosition = (document.body.scrollTop / 1250);
+ // recalculated all possible phases before updating the position
+  var phases = [];
+
+  for (var i = 0; i < 5; i++) {
+   phases.push(Math.sin(scrollPosition + i));
+  }
 
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin(scrollPosition + (i % 5));
+    var phase = phases[i%5];
     var left = (items[i].basicLeft + 100) * phase;
     items[i].style.transform = "translateX("+left+"px) translateZ(0)";
   }
@@ -534,10 +541,13 @@ window.addEventListener('scroll', updatePositions);
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
-  var cols = 8;
+  ///changed the number of pizzas dynamically based on screen width and height to show fewer and load faster
+  var rows = Math.floor(window.innerHeight / 50);
+  var cols = Math.floor(window.innerWidth / 300);
   var s = 256;
-  //changed the number of pizzas to show fewer and load faster
-  for (var i = 0; i < 20; i++) {
+  // moved movingPizzas out of the loop and changed querySelector with getElementById
+  var movingPizzas = document.getElementById("movingPizzas1");
+  for (var i = 0; i < rows*cols; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -545,7 +555,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    movingPizzas.appendChild(elem);
   }
   updatePositions();
 });

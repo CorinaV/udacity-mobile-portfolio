@@ -30,13 +30,16 @@ $ ngrok http 8080
 * inlined css in pizza.html at the bottom
 * added `backface-visibility: hidden` to class 'mover'
 * refactored `changePizzaSizes` function and changed `querySelectorAll` with `getElementsByClassName`
-* refactored `updatePositions` function
-* reduced number of sliding pizzas generated from 200 to 20 as there were too many populating the page
+* refactored `updatePositions` function:
+  * recalculated all possible phases before updating the position
+  * took outside of loop the calculation because it needs to be calculated only once
+* replaced `querySelector` with `getElementById` everywhere
+* calculated dynamically number of sliding pizzas based on width and height
 * installed [gulp](http://gulpjs.com/) and minified css and js
 
 ## How to minify ccs and js using gulp
  * in the project root folder
- 
+
  ```
 $ nmp install
 $ gulp mincss
